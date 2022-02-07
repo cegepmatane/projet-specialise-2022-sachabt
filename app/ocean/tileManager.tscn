@@ -530,7 +530,10 @@ tile_data = PoolIntArray( -851965, 3, 0, -851964, 1, 0, -851963, 1, 2, -851962, 
 
 [node name="Sprite" type="Sprite" parent="."]
 
-[node name="PropsTileMap" type="TileMap" parent="."]
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+gravity_scale = 0.0
+
+[node name="PropsTileMap" type="TileMap" parent="RigidBody2D"]
 z_index = 1
 tile_set = SubResource( 1 )
 cell_size = Vector2( 16, 16 )

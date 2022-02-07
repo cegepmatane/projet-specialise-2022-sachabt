@@ -1,12 +1,35 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://assets/player/player.png" type="Texture" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
 
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 9.0
+height = 4.0
+
+[sub_resource type="Animation" id=2]
+resource_name = "walk"
+
 [node name="Player" type="KinematicBody2D"]
+z_index = 5
 script = ExtResource( 2 )
+base_speed = 150
 
 [node name="Icon" type="Sprite" parent="."]
 texture = ExtResource( 1 )
+hframes = 6
+vframes = 5
 
 [node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 0.5, 0.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 8 )
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/walk = SubResource( 2 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+anim_player = NodePath("../AnimationPlayer")
