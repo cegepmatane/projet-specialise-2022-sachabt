@@ -4,6 +4,7 @@ export var base_speed := 350
 
 func _physics_process(delta):
 	get_input()
+	get_interaction()
 
 func save():
 	var save_dict = {
@@ -39,4 +40,11 @@ func get_input():
 	animate(velocity)
 
 func animate(direction):
-	pass
+	if direction.x > 0:
+		$PlayerSprite.flip_h = false
+	elif direction.x < 0:
+		$PlayerSprite.flip_h = true
+
+func get_interaction():
+	if Input.is_action_just_pressed("interact") && $InteractionArea.get_overlapping_bodies().size() != 0:
+		pass
