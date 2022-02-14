@@ -1,4 +1,4 @@
-extends "res://Player.gd"
+extends "res://scripts/Player.gd"
 
 #export var base_speed := 350
 export var area_size := Vector2(1020, 600)
@@ -6,25 +6,15 @@ export var area_size := Vector2(1020, 600)
 var last_input :=  []
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	#get_movement()
 	get_interaction()
+	update_shader()
 
-##const MOVEMENTS = {
-##	'up': Vector2.UP,
-##	'left': Vector2.LEFT,
-##	'right': Vector2.RIGHT,
-##	'down': Vector2.DOWN,
-##}
-##
-##func get_movement():
-##
-##	position.x = fposmod(position.x, area_size.x)
-##	position.y =  fposmod(position.y, area_size.y)
-##	#maybe try to duplicate the world.... but overly complicated sooo just put nothing to the edge of the world
-##	#the background will change and the player will notice he's been teleported
-##	#temporary solution should be changed !!!!!
-#
+
+func update_shader():
+	$WaterLayer/water/waterShader.material.set_shader_param("player_pos", position)
+	#$WaterLayer/water/waterShader.material.set_shader_param("speed", base_speed)
 
 func animate(direction):
 	if(direction.x>0):

@@ -1,241 +1,129 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://water_shader.tres" type="Shader" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[sub_resource type="Shader" id=8]
+code = "// Author @patriciogv - 2015
+// http://patriciogonzalezvivo.com
 
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 1 )
-shader_param/time_factor = 0.2
-shader_param/amplitude = Vector2( 20, 15 )
-
-[sub_resource type="StreamTexture" id=2]
-flags = 4
-load_path = "res://.import/icon.png-487276ed1e3a0c39cad0279d744ee560.stex"
-
-[sub_resource type="Shader" id=3]
-code = "/*
-Shader from Godot Shaders - the free shader library.
-godotshaders.com/shader/god-rays
-
-Feel free to use, improve and change this shader according to your needs
-and consider sharing the modified result on godotshaders.com.
-*/
-
+//taken from https://thebookofshaders.com/edit.php#11/lava-lamp.frag
+//freely adapted to fit the project
 shader_type canvas_item;
 
-uniform float angle = -0.3;
-uniform float position = -0.2;
-uniform float spread : hint_range(0.0, 1.0) = 0.5;
-uniform float cutoff : hint_range(-1.0, 1.0) = 0.1;
-uniform float falloff : hint_range(0.0, 1.0) = 0.2;
-uniform float edge_fade : hint_range(0.0, 1.0) = 0.15;
+//move the texture of the shader around when the player is moving
+uniform vec2 player_pos =vec2(.0);
+uniform vec2 speed = vec2(0.005, -0.005);
 
-uniform float speed = 1.0;
-uniform float ray1_density = 8.0;
-uniform float ray2_density = 30.0;
-uniform float ray2_intensity : hint_range(0.0, 1.0) = 0.3;
-
-uniform vec4 color : hint_color = vec4(1.0, 0.9, 0.65, 0.8);
-
-uniform bool hdr = false;
-uniform float seed = 5.0;
-
-// Random and noise functions from Book of Shader's chapter on Noise.
-float random(vec2 _uv) {
-    return fract(sin(dot(_uv.xy,
-                         vec2(12.9898, 78.233))) *
-        43758.5453123);
+vec3 mod289(vec3 x) { 
+	return x - floor(x * (1.0 / 289.0)) * 289.0; 
+}
+vec2 mod289Vec2(vec2 x) { 
+	return x - floor(x * (1.0 / 289.0)) * 289.0; 
+}
+vec3 permute(vec3 x) { 
+	return mod289(((x*34.0)+1.0)*x); 
 }
 
-float noise (in vec2 uv) {
-    vec2 i = floor(uv);
-    vec2 f = fract(uv);
+float snoise(vec2 v) {
+    const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                        0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                        -0.577350269189626,  // -1.0 + 2.0 * C.x
+                        0.024390243902439); // 1.0 / 41.0
+    vec2 i  = floor(v + dot(v, C.yy) );
+    vec2 x0 = v -   i + dot(i, C.xx);
+    vec2 i1;
+    i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+    vec4 x12 = x0.xyxy + C.xxzz;
+    x12.xy -= i1;
+    i = mod289Vec2(i); // Avoid truncation effects in permutation
+    vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+        + i.x + vec3(0.0, i1.x, 1.0 ));
 
-    // Four corners in 2D of a tile
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-
-
-    // Smooth Interpolation
-
-    // Cubic Hermine Curve. Same as SmoothStep()
-    vec2 u = f * f * (3.0-2.0 * f);
-
-    // Mix 4 coorners percentages
-    return mix(a, b, u.x) +
-            (c - a)* u.y * (1.0 - u.x) +
-            (d - b) * u.x * u.y;
-}
-
-mat2 rotate(float _angle){
-    return mat2(vec2(cos(_angle), -sin(_angle)),
-                vec2(sin(_angle), cos(_angle)));
-}
-
-vec4 screen(vec4 base, vec4 blend){
-	return 1.0 - (1.0 - base) * (1.0 - blend);
-}
-
-void fragment()
-{
-	
-	// Rotate, skew and move the UVs
-	vec2 transformed_uv = ( rotate(angle) * (UV - position) )  / ( (UV.y + spread) - (UV.y * spread) );
-	
-	// Animate the ray according the the new transformed UVs
-	vec2 ray1 = vec2(transformed_uv.x * ray1_density + sin(TIME * 0.1 * speed) * (ray1_density * 0.2) + seed, 1.0);
-	vec2 ray2 = vec2(transformed_uv.x * ray2_density + sin(TIME * 0.2 * speed) * (ray1_density * 0.2) + seed, 1.0);
-	
-	// Cut off the ray's edges
-	float cut = step(cutoff, transformed_uv.x) * step(cutoff, 1.0 - transformed_uv.x);
-	ray1 *= cut;
-	ray2 *= cut;
-	
-	// Apply the noise pattern (i.e. create the rays)
-	float rays;
-	
-	if (hdr){
-		// This is not really HDR, but check this to not clamp the two merged rays making 
-		// their values go over 1.0. Can make for some nice effect
-		rays = noise(ray1) + (noise(ray2) * ray2_intensity);
-	}
-	else{
-		 rays = clamp(noise(ray1) + (noise(ray2) * ray2_intensity), 0., 1.);
-	}
-	
-	// Fade out edges
-	rays *= smoothstep(0.0, falloff, (1.0 - UV.y)); // Bottom
-	rays *= smoothstep(0.0 + cutoff, edge_fade + cutoff, transformed_uv.x); // Left
-	rays *= smoothstep(0.0 + cutoff, edge_fade + cutoff, 1.0 - transformed_uv.x); // Right
-	
-	// Color to the rays
-	vec3 shine = vec3(rays) * color.rgb;
-
-	// Try different blending modes for a nicer effect. \"Screen\" is included in the code,
-	// but take a look at https://godotshaders.com/snippet/blending-modes/ for more.
-	// With \"Screen\" blend mode:
-	shine = screen(texture(SCREEN_TEXTURE, SCREEN_UV), vec4(color)).rgb;
-	
-	COLOR = vec4(shine, rays * color.a);
-}"
-
-[sub_resource type="ShaderMaterial" id=4]
-shader = SubResource( 3 )
-shader_param/angle = -0.3
-shader_param/position = -0.2
-shader_param/spread = 0.4
-shader_param/cutoff = 0.1
-shader_param/falloff = 0.4
-shader_param/edge_fade = 0.15
-shader_param/speed = 2.0
-shader_param/ray1_density = 8.0
-shader_param/ray2_density = 30.0
-shader_param/ray2_intensity = 0.3
-shader_param/color = Color( 1, 0.901961, 0.65098, 0.8 )
-shader_param/hdr = false
-shader_param/seed = 8.0
-
-[sub_resource type="VisualShaderNodeColorFunc" id=5]
-output_port_for_preview = 0
-default_input_values = [ 0, Vector3( 120, 255, 30 ) ]
-
-[sub_resource type="VisualShader" id=6]
-code = "shader_type spatial;
-render_mode specular_schlick_ggx;
-
-
-
-
-void vertex() {
-// Output:0
-
+    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+    m = m*m ;
+    m = m*m ;
+    vec3 x = 2.0 * fract(p * C.www) - 1.0;
+    vec3 h = abs(x) - 0.5;
+    vec3 ox = floor(x + 0.5);
+    vec3 a0 = x - ox;
+    m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+    vec3 g;
+    g.x  = a0.x  * x0.x  + h.x  * x0.y;
+    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+    return 130.0 * dot(m, g);
 }
 
 void fragment() {
-// Output:0
+	vec2 u_resolution = 1.0 / SCREEN_PIXEL_SIZE;
+	float u_time = TIME;
+    vec2 st = FRAGCOORD.xy/u_resolution.xy;
+    st.x *= u_resolution.x/u_resolution.y;
+    vec3 color = vec3(0.0);
+    vec2 pos = vec2(st*3.);
+	
+	//move the texture
+	pos+= player_pos * speed;
+    
+	float DF = 0.0;
 
-}
+    // Add a random position
+    float a = 0.0;
+    vec2 vel = vec2(u_time*.05);
+    DF += snoise(pos+vel)*.25+.25;
 
-void light() {
-// Output:0
+    // Add a random position
+    a = snoise(pos*vec2(cos(u_time*0.05),sin(u_time*0.1))*0.1)*3.1415;
+    vel = vec2(cos(a),sin(a));
+    DF += snoise(pos+vel)*.25+.25;
 
+    color = vec3( smoothstep(.7,.75,fract(DF)) );
+    if(distance(color, vec3(.0,1.,.0))>1.){
+        color = vec3(0.248,0.419,0.935);
+    }
+    else{
+        color = vec3(0.176,0.268,0.840);
+    }
+    
+    vec3 foam_color = vec3(0.0);
+    // Add a random position
+    a = 0.0;
+    vel = vec2(u_time*.05);
+    DF += snoise(pos+vel)*.25+.25;
+
+    // Add a random position
+    a = snoise(pos*vec2(cos(u_time*1.030),cos(u_time*0.1))*0.01)*3.1415;
+    vel = vec2(cos(a),sin(a));
+    DF += snoise(pos+vel)*.25+.25;
+
+    foam_color = vec3( smoothstep(.7,.75,fract(DF)) );
+    if(distance(foam_color, vec3(.0,1.,.0))>1.){
+        foam_color = vec3(1.,1.000,1.);
+    }
+    
+    else{
+        foam_color = vec3(0.027,0.099,0.840);
+    }
+    
+    color *= foam_color;
+    //gl_FragColor = vec4(1.0-color,1.0);
+    COLOR = vec4(color,1.0);
 }
 "
-graph_offset = Vector2( 302.536, 396.742 )
-nodes/fragment/0/position = Vector2( 480, 520 )
-nodes/fragment/2/node = SubResource( 5 )
-nodes/fragment/2/position = Vector2( 1140, 700 )
-
-[sub_resource type="ShaderMaterial" id=7]
-shader = SubResource( 6 )
-
-[sub_resource type="Shader" id=8]
-code = "shader_type canvas_item;
-
-
-//uniform sampler2D bg : hint_albedo;
-//uniform sampler2D wave1 : hint_albedo;
-//uniform sampler2D wave2 : hint_albedo;
-uniform sampler2D noise : hint_black_albedo;
-
-uniform vec4 bg : hint_color =  vec4(0.04, 0.38, 0.88, 1.0);
-uniform vec4 wave1 : hint_color =  vec4(0.04, 0.35, 0.78, 1.0);
-uniform vec4 wave2 : hint_color = vec4(0.8125, 0.9609, 0.9648, 1.0);
-
-vec2 tile(vec2 _st, float _zoom){
-    _st *= _zoom;
-    return fract(_st);
-}
-
-float box(vec2 _st, vec2 _size){
-    _size = vec2(0.5)-_size*0.5;
-    vec2 uv = smoothstep(_size,_size+vec2(1e-4),_st);
-    uv *= smoothstep(_size,_size+vec2(1e-4),vec2(1.0)-_st);
-    return uv.x*uv.y;
-}
-
-void fragment(){
-	vec2 st = vec2(UV.x/(SCREEN_PIXEL_SIZE.y/SCREEN_PIXEL_SIZE.x),UV.y);
-    vec3 color = vec3(0.0);
-   	//st = tile(st,8.0);
-	//color += texture(bg,st).rgb;
-	color = bg.rgb;
-	color += 0.5* texture(wave1,vec2(st.x + TIME * 0.02,st.y +0.2  + sin(TIME*1.5) * 0.06)).rgb / 0.5 * texture(noise,vec2(st.x + cos(TIME * 0.5),st.y)).rgb;
-	color += 0.5* texture(wave2,vec2(st.x - TIME * 0.08,st.y)).rgb / 0.5 * texture(noise,vec2(st.x ,st.y - sin(TIME * 0.5))).rgb;
-	COLOR = vec4(color,1.0);
-}"
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = SubResource( 8 )
+shader_param/player_pos = Vector2( 0, 0 )
+shader_param/speed = Vector2( 0.005, -0.005 )
 
-[node name="water" type="Node2D"]
-
-[node name="Icon" type="Sprite" parent="."]
-material = SubResource( 1 )
-position = Vector2( -504, 201 )
-texture = SubResource( 2 )
-
-[node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource( 4 )
-margin_left = -677.0
-margin_top = 56.0
-margin_right = -62.0
-margin_bottom = 397.0
+[node name="water" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Icon2" type="Sprite" parent="."]
-material = SubResource( 7 )
-position = Vector2( 449, 172 )
-texture = ExtResource( 2 )
-
-[node name="ColorRect2" type="ColorRect" parent="."]
+[node name="waterShader" type="ColorRect" parent="."]
 material = SubResource( 9 )
-margin_right = 339.0
-margin_bottom = 201.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
