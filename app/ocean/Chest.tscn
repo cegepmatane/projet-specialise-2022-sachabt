@@ -1,9 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Chest.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Chest.gd" type="Script" id=1]
+[ext_resource path="res://assets/chest_01.png" type="Texture" id=2]
 
-[node name="Chest" type="RigidBody2D"]
-gravity_scale = 0.0
+[sub_resource type="RectangleShape2D" id=2]
+
+[node name="Chest" type="StaticBody2D"]
+collision_layer = 4
 script = ExtResource( 1 )
+objet = 1
+nombre = 1
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Chest" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
