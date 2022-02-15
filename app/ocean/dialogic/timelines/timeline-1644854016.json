@@ -10,13 +10,13 @@
 			"condition": "",
 			"definition": "1644854363-648",
 			"event_id": "dialogic_012",
-			"value": "VIDE"
+			"value": "EMPTY"
 		},
 		{
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "Vous avez trouvé  [wave amp=75 freq=3][color=red]absolument rien !!![/color][/wave]"
+			"text": "Vous avez trouvé  [wave amp=75 freq=3][rainbow freq=0.2 sat=10 val=20]absolument rien !!![/rainbow][/wave]"
 		},
 		{
 			"event_id": "dialogic_013"
@@ -25,13 +25,13 @@
 			"condition": "",
 			"definition": "1644854363-648",
 			"event_id": "dialogic_012",
-			"value": "ARGENT"
+			"value": "MONEY"
 		},
 		{
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": ""
+			"text": "vous avez trouvé [number]  [color=yellow]pièce d'or !!![/color]"
 		},
 		{
 			"event_id": "dialogic_013"
@@ -46,7 +46,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": ""
+			"text": "ce coffre contient [number] [color=red]potions !![/color]"
 		},
 		{
 			"event_id": "dialogic_013"

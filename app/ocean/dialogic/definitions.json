@@ -7,7 +7,13 @@
 			"id": "1644854363-648",
 			"name": "object_in_chest",
 			"type": 0,
-			"value": "VIDE"
+			"value": "EMPTY"
+		},
+		{
+			"id": "1644900145-366",
+			"name": "number",
+			"type": 0,
+			"value": "0"
 		}
 	]
 }

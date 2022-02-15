@@ -57,7 +57,7 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 SceneSwitcher="*res://SceneSwitcher.tscn"
-Inventory="*res://scripts/inventory.gd"
+Inventory="*res://scripts/Inventory.gd"
 
 [editor_plugins]
 

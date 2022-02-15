@@ -1,13 +1,9 @@
 extends "res://scripts/Player.gd"
 
-#export var base_speed := 350
 export var area_size := Vector2(1020, 600)
-#contain the MOVEMENTS input the player is currently holding
-var last_input :=  []
 
 
 func _physics_process(_delta):
-	#get_movement()
 	get_interaction()
 	update_shader()
 

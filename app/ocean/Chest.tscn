@@ -8,8 +8,6 @@
 [node name="Chest" type="StaticBody2D"]
 collision_layer = 4
 script = ExtResource( 1 )
-objet = 1
-nombre = 1
 
 [node name="Chest" type="Sprite" parent="."]
 texture = ExtResource( 2 )

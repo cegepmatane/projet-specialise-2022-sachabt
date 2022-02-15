@@ -15,6 +15,7 @@ func pay(cost):
 		return false
 	money -= cost
 	return true
+
 func use_potion():
 	if potion<0:
 		return false
