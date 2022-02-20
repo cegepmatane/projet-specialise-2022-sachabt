@@ -10,6 +10,7 @@ func _physics_process(_delta):
 
 func update_shader():
 	$WaterLayer/water/waterShader.material.set_shader_param("player_pos", position)
+	#appliquer un vecteur/une vitesse
 	#$WaterLayer/water/waterShader.material.set_shader_param("speed", base_speed)
 
 func animate(direction):
@@ -45,5 +46,5 @@ func get_interaction():
 	if $InteractionArea.get_overlapping_bodies().size() != 0 && Input.is_action_just_pressed("interact"):
 		var new_scene_path = $InteractionArea.get_overlapping_bodies()[0].islandPath
 		SceneSwitcher.change_scene(new_scene_path)
-	#if Input.is_action_just_pressed("interact"):
-	#	get_parent().get_node("Save").save_game()
+#	if Input.is_action_just_pressed("interact"):
+#		get_parent().get_node("Save").save_game()

@@ -60,6 +60,8 @@ void fragment() {
     vec2 pos = vec2(st*3.);
 	
 	//move the texture
+	
+	//remplacer par un mouvement uniforme avec un toggle, mode avancer
 	pos+= player_pos * speed;
     
 	float DF = 0.0;
