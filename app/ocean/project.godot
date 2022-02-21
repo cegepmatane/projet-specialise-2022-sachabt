@@ -59,6 +59,7 @@ config/icon="res://assets/icon.png"
 Inventory="*res://scripts/Inventory.gd"
 SceneSwitcher="*res://SceneSwitcher.tscn"
 Save="*res://Save.tscn"
+Global="*res://scripts/Global.gd"
 
 [editor_plugins]
 

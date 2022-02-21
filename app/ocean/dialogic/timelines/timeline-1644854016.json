@@ -1,12 +1,6 @@
 {
 	"events": [
 		{
-			"character": "",
-			"event_id": "dialogic_001",
-			"portrait": "",
-			"text": "hello world"
-		},
-		{
 			"condition": "",
 			"definition": "1644854363-648",
 			"event_id": "dialogic_012",
