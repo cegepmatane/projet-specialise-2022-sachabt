@@ -1,4 +1,4 @@
-extends Node2D
+extends "res://scripts/talking_character.gd"
 
 enum OBJECT {
 	MONEY, 
@@ -27,12 +27,5 @@ func get_object():
 		_:
 			Dialogic.set_variable("object_in_chest", "EMPTY")
 	$Chest.frame = 1;
-	var chest_dialog = Dialogic.start('open-chest')
-	chest_dialog.connect("dialogic_signal", self, "dialog_end")
-	chest_dialog.pause_mode = Node.PAUSE_MODE_PROCESS
-	add_child(chest_dialog)
-	get_tree().paused = true
-
-func dialog_end(arg):
-	print("bla")
-	get_tree().paused = false
+	
+	talk()

@@ -9,6 +9,7 @@
 pause_mode = 2
 collision_layer = 4
 script = ExtResource( 1 )
+dialog_name = "open-chest"
 
 [node name="Chest" type="Sprite" parent="."]
 texture = ExtResource( 2 )
