@@ -100,6 +100,7 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 6
 vframes = 5
+frame = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -110,11 +111,13 @@ position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+pause_mode = 2
 anims/RESET = SubResource( 3 )
 anims/idle = SubResource( 4 )
 anims/walk = SubResource( 2 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+pause_mode = 2
 tree_root = SubResource( 16 )
 anim_player = NodePath("../AnimationPlayer")
 active = true

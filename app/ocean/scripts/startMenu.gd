@@ -1,6 +1,7 @@
 extends Control
 
 export var start_scene := "res://Main.tscn"
+onready var settingsmenu = load("res://Options.tscn")
 
 func ready():
 	#the player can't load an unexisting game
@@ -26,3 +27,8 @@ func _on_StartButton_pressed():
 	print("pressed start")
 	SceneSwitcher.change_scene(start_scene)
 	pass # Replace with function body.
+
+
+func _on_settingsButton_pressed():
+	add_child(settingsmenu.instance())
+	get_tree().paused = true

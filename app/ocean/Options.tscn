@@ -27,7 +27,7 @@ margin_left = 132.0
 margin_top = 379.0
 margin_right = 232.0
 margin_bottom = 437.0
-text = "retour"
+text = "Retour"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -37,7 +37,7 @@ margin_left = 578.0
 margin_top = 383.0
 margin_right = 707.0
 margin_bottom = 446.0
-text = "sauvegarder"
+text = "Sauvegarder"
 __meta__ = {
 "_edit_use_anchors_": false
 }

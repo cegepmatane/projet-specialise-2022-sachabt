@@ -51,7 +51,7 @@ _global_script_class_icons={
 [application]
 
 config/name="ocean"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://startMenu.tscn"
 config/icon="res://assets/icon.png"
 
 [autoload]

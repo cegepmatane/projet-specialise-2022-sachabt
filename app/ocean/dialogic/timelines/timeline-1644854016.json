@@ -44,6 +44,10 @@
 		},
 		{
 			"event_id": "dialogic_013"
+		},
+		{
+			"emit_signal": "",
+			"event_id": "dialogic_040"
 		}
 	],
 	"metadata": {

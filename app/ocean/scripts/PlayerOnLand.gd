@@ -21,5 +21,6 @@ func animate(direction):
 
 func get_interaction():
 	if Input.is_action_just_pressed("interact") && $InteractionArea.get_overlapping_bodies().size() != 0:
+		state_machine.travel("idle")
 		$InteractionArea.get_overlapping_bodies()[0].interact()
 

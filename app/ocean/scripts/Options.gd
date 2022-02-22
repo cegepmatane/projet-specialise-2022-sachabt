@@ -4,6 +4,7 @@ onready var buttonContainer = get_node("Panel/VBoxContainer")
 onready var buttonScript = load("res://scripts/KeyButton.gd")
 var keybinds
 var buttons ={}
+
 func _ready():
 	keybinds = Global.keybinds.duplicate()
 	
@@ -17,7 +18,7 @@ func _ready():
 		button.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 		
 		label.text = key
-		
+		label.anchor_left = 10
 		var button_value = keybinds[key]
 		
 		if button_value != null:
@@ -37,6 +38,7 @@ func _ready():
 		buttonContainer.add_child(hbox)
 		
 		buttons[key] = button
+		
 func change_bind(key, value):
 	keybinds[key] = value
 	
