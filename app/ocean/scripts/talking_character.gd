@@ -11,5 +11,4 @@ func talk():
 	get_tree().paused = true
 
 func dialog_end(arg):
-	print("bla")
 	get_tree().paused = false

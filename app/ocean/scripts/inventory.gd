@@ -17,8 +17,7 @@ func add_potion(number):
 
 func add_money(number):
 	money += number
-	print("money %s" % money)
-
+	
 func pay(cost):
 	if money < cost :
 		return false
