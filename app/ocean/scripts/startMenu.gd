@@ -24,7 +24,6 @@ func _on_LoadButton_pressed():
 
 
 func _on_StartButton_pressed():
-	print("pressed start")
 	SceneSwitcher.change_scene(start_scene)
 	pass # Replace with function body.
 

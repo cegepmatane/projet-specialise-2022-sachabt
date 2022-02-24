@@ -4,7 +4,7 @@ onready var buttonContainer = get_node("Panel/VBoxContainer")
 onready var buttonScript = load("res://scripts/KeyButton.gd")
 var keybinds
 var buttons ={}
-
+var text_speed := 2
 func _ready():
 	keybinds = Global.keybinds.duplicate()
 	
@@ -38,7 +38,12 @@ func _ready():
 		buttonContainer.add_child(hbox)
 		
 		buttons[key] = button
-		
+	
+	set_dialogue_button()
+
+func set_dialogue_button():
+	$Panel/DialogueSpeed.selected =  (Global.read_speed()/2)-1
+
 func change_bind(key, value):
 	keybinds[key] = value
 	
@@ -58,4 +63,10 @@ func _on_Save_pressed():
 	Global.keybinds = keybinds.duplicate()
 	Global.set_game_binds()
 	Global.write_config()
+	Global.set_dialog_speed(text_speed)
 	_on_Back_pressed()
+
+
+func _on_DialogueSpeed_item_selected(index):
+	text_speed = index+1
+	text_speed *= 2
