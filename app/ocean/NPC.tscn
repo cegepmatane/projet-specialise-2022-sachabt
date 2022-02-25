@@ -39,7 +39,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5 ]
 }
 
-[node name="NPC" type="StaticBody2D"]
+[node name="NPC" type="KinematicBody2D" groups=["moving_npc"]]
 collision_layer = 4
 script = ExtResource( 1 )
 
