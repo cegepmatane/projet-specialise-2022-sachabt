@@ -26,3 +26,4 @@ func get_interaction():
 
 func update_hud():
 	$HUD.set_money(Inventory.money)
+	$HUD.set_potion(Inventory.potion)
