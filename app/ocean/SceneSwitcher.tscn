@@ -43,38 +43,51 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 1, -1 ]
 }
-tracks/1/type = "value"
+tracks/1/type = "bezier"
 tracks/1/path = NodePath("CanvasLayer/ColorRect:material:shader_param/number_of_wave")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ 0.0, 1.0, 2.0, 3.0, 4.0 ]
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 4, -0.7, -0.446867, 0.25, 0 ),
+"times": PoolRealArray( 0, 1 )
 }
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
 uniform float total_wave = 5;
-uniform float number_of_wave = 3;
+uniform float number_of_wave = 0; //represent how much wave are shown , 2.5 mean 2 waves and one half shown
 
 vec4 curve(vec2 uv, float pos, vec3 color){
-	float curve = 0.1 * sin((9.25 * uv.x+pos) + (2.0 * TIME)) + pos+.4;
-  	return vec4(step(uv.y, curve)*color, step(uv.y, curve));
+	if(pos > 0.){
+		float curve = .15 * sin((6.25 * uv.x) + (1.5 * TIME)) + pos;
+  		return vec4(step(uv.y, curve)*color, step(uv.y, curve));
+	}
+	return vec4(0.);
 }
+
 void fragment(){
-	vec2 uv = FRAGCOORD.xy / (1.0 / SCREEN_PIXEL_SIZE);
+	vec2 screen_size = (1.0 / SCREEN_PIXEL_SIZE);
+	vec2 uv = FRAGCOORD.xy / screen_size;
 	vec4 wave;
 	//vec3 wave = curve(uv, 0., vec3(1., 0., 0.));
-	for (int i = 0; i < int(ceil(number_of_wave)); i++){
-		wave += curve(uv, (uv.y/total_wave)*float(i), vec3(.0,.0, float(i)/number_of_wave));
-		//I could try to make a smooth transition using bezier curve
-	}	
+//	for (int i = 0; i < int(ceil(number_of_wave)); i++){
+//		wave += curve(uv, (uv.y/total_wave)*float(i), vec3(.0,.0, float(i)/number_of_wave));
+//		//I could try to make a smooth transition using bezier curve
+//	}
 	
+	for (int i = 0; i < int(total_wave); i++){
+		float visibility = number_of_wave - float(i);
+		visibility = clamp(visibility, 0., 1.);
+		//how much of this wave is visible
+		float height_difference = (screen_size.y/(total_wave*40.));
+		float height = height_difference*float(i)*step(0.1, visibility) + height_difference*visibility;
+		height *= .2;
+		wave += curve(uv,height , vec3(.0,.0, .2));
+		//I could try to make a smooth transition using bezier curve
+	}
 	//should apply the step function to the alpha too
 	COLOR = vec4(wave);
 }"
@@ -82,7 +95,7 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 shader_param/total_wave = 5.0
-shader_param/number_of_wave = 0.0
+shader_param/number_of_wave = 4.144
 
 [node name="SceneSwitcher" type="Node2D"]
 z_index = -2
@@ -99,6 +112,8 @@ layer = -1
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.0
+margin_right = 1.0
 color = Color( 0.215686, 0.0784314, 0.0784314, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
