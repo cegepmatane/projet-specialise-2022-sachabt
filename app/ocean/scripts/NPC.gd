@@ -6,18 +6,30 @@ export var pointB:= Vector2.ZERO
 var current_target
 
 var path := PoolVector2Array()
+var state_machine
+var talking = false
 
 func _ready():
+	state_machine = $AnimationTree.get("parameters/playback")
+	state_machine.travel("idle")
 	current_target = pointA
 	call_deferred("set_path")
 	set_process(false)
 
 func _process(delta):
-	var move_distance : float = speed * delta
-	move(move_distance)
+	if pointA != Vector2.ZERO and pointB != Vector2.ZERO:
+		var move_distance : float = speed * delta
+		move(move_distance)
+		state_machine.travel("run")
+		print("yikes")
 
 func interact():
 	talk()
+	state_machine.travel("idle")
+	print("auyau")
+	talking = true
+	set_process(false)
+		
 
 
 func move(distance : float):

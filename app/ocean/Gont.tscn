@@ -16,5 +16,6 @@ number = 5
 
 [node name="NPC" parent="." index="3" instance=ExtResource( 2 )]
 position = Vector2( 48, -53 )
+dialog_name = "old_man"
 pointA = Vector2( -53, -130 )
 pointB = Vector2( 73, -130 )
