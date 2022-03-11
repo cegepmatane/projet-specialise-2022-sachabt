@@ -10,3 +10,6 @@ func move():
 
 func get_npc_path(npc):
 	return nav_2d.get_simple_path(npc.global_position, npc.current_target)
+
+func get_enemy_path(enemy, target):
+	return nav_2d.get_simple_path(enemy.global_position, target.global_position)

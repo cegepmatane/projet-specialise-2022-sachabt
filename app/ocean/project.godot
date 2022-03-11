@@ -121,6 +121,7 @@ attack={
 2d_physics/layer_2="Islands"
 2d_physics/layer_3="NPC"
 2d_physics/layer_4="Ennemy"
+2d_physics/layer_5="tileMap"
 
 [physics]
 

@@ -23,6 +23,7 @@ func get_interaction():
 		state_machine.travel("idle")
 		$InteractionArea.get_overlapping_bodies()[0].interact()
 		update_hud()
+		#update HUD shouldn't be here !
 
 func update_hud():
 	$HUD.set_money(Inventory.money)

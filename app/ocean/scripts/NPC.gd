@@ -21,7 +21,6 @@ func _process(delta):
 		var move_distance : float = speed * delta
 		move(move_distance)
 		state_machine.travel("run")
-		print("yikes")
 
 func interact():
 	talk()
