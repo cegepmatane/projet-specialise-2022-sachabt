@@ -3,12 +3,14 @@ extends KinematicBody2D
 #should extends a Parent class to himself and npc
 
 export var speed := 100
+export var lp := 1 
 var target = null
 
-var max_dist = 200
-var min_dist = 10
+var max_dist := 200
+var min_dist := 10
 
 var path := PoolVector2Array()
+
 
 func _ready():
 	set_physics_process(false)
@@ -17,7 +19,7 @@ func _physics_process(delta):
 	var move_distance : float = speed * delta
 	if position.distance_to(target.position) > max_dist:
 		set_physics_process(false)
-	elif position.distance_to(target.position) >min_dist:
+	elif position.distance_to(target.position) > min_dist:
 		move(move_distance)
 	else:
 		attack()

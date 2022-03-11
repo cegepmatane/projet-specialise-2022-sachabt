@@ -8,6 +8,8 @@ var keybinds = {}
 
 var dialogThemeFile
 
+var music_vol := 75
+
 func _input(event):
 	if Input.is_key_pressed(KEY_ESCAPE):
 		add_child(settingsmenu.instance())
@@ -23,6 +25,8 @@ func _ready():
 				keybinds[key] = key_value
 			else:
 				keybinds[key] = null
+		
+		load_vol()
 	else:
 		print("CONFIG FILE NOT FOUND")
 		get_tree().quit()
@@ -51,7 +55,6 @@ func read_speed():
 	dialogThemeFile = ConfigFile.new()
 	if dialogThemeFile.load(dialogue_theme_path) == OK:
 		return dialogThemeFile.get_value("text", "speed")
-		
 
 func write_config():
 	for key in keybinds.keys():
@@ -61,3 +64,10 @@ func write_config():
 		else:
 			configFile.set_value("keybinds", key, "")
 	configFile.save(filepath)
+
+func save_vol(vol):
+	configFile.set_value("volume", "db", vol)
+
+func load_vol():
+	var vol = configFile.get_value("volume", "db")
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(vol))

@@ -56,6 +56,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
 [connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="LoadButton" to="." method="_on_LoadButton_pressed"]
 [connection signal="pressed" from="settingsButton" to="." method="_on_settingsButton_pressed"]

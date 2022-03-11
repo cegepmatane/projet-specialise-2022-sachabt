@@ -55,7 +55,7 @@ start_node = "idle"
 [sub_resource type="AnimationNodeStateMachinePlayback" id=3]
 
 [sub_resource type="CircleShape2D" id=8]
-radius = 40.1123
+radius = 67.0075
 
 [node name="Slime" type="KinematicBody2D"]
 collision_layer = 0
