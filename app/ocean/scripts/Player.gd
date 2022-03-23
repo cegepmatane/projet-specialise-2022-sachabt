@@ -1,6 +1,10 @@
 extends KinematicBody2D
 
 export var base_speed := 350
+var speed := 0
+
+func _ready():
+	speed = base_speed
 
 func _physics_process(_delta):
 	get_input()
@@ -33,7 +37,7 @@ func get_input():
 		velocity.x -= 1
 	
 	velocity = velocity.normalized() #the vector is normalized so that the player does not go faster diagonally
-	velocity *= base_speed
+	velocity *= speed
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 	

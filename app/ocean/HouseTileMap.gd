@@ -10,6 +10,5 @@ func _ready():
 			var door_instance = door_area.instance()
 			door_instance.position = map_to_world(tile)
 			add_child(door_instance)
-			print("yum")
 			pass
 	pass

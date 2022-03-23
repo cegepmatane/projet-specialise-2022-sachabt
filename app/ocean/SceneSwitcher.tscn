@@ -38,10 +38,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 2, -1 ]
+"values": [ 2 ]
 }
 tracks/1/type = "bezier"
 tracks/1/path = NodePath("CanvasLayer/ColorRect:material:shader_param/number_of_wave")
@@ -104,12 +104,12 @@ anims/fade = SubResource( 3 )
 layer = -1
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+light_mask = 0
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1.0
 margin_right = 1.0
-color = Color( 0.215686, 0.0784314, 0.0784314, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

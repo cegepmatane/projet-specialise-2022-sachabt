@@ -7,12 +7,13 @@ export var lp := 1
 var target = null
 
 var max_dist := 200
-var min_dist := 10
+var min_dist := 20
 
 var path := PoolVector2Array()
-
+var state_machine
 
 func _ready():
+	state_machine = $AnimationTree.get("parameters/playback")
 	set_physics_process(false)
 
 func _physics_process(delta):
@@ -22,6 +23,7 @@ func _physics_process(delta):
 	elif position.distance_to(target.position) > min_dist:
 		move(move_distance)
 	else:
+		print("attacking")
 		attack()
 
 func _on_DetectionArea_body_entered(body):
@@ -52,5 +54,6 @@ func set_path():
 		return
 
 func attack():
-	#set process to false til the animation finish
+	set_physics_process(false)
+	$AnimationPlayer.play("fade")
 	pass

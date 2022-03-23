@@ -1,7 +1,9 @@
 extends "res://scripts/Player.gd"
 
+export var speed_increase := 1.2
 
 var state_machine
+var invincible := false
 
 func _ready():
 	state_machine = $AnimationTree.get("parameters/playback")
@@ -24,7 +26,32 @@ func get_interaction():
 		$InteractionArea.get_overlapping_bodies()[0].interact()
 		update_hud()
 		#update HUD shouldn't be here !
+		
+	if Input.is_action_just_pressed("attack"):
+		attack()
+	
+	if Input.is_action_just_pressed("shade") && $ShadeCooldown.time_left == 0:
+		shade()
 
 func update_hud():
 	$HUD.set_money(Inventory.money)
 	$HUD.set_potion(Inventory.potion)
+
+func attack():
+	pass
+
+func shade():
+	$ShadeParticlesEffect.emitting = true
+	speed *= speed_increase
+	$PlayerSprite.modulate = Color(1,1,1,.2)
+	#maybe add a shader here
+	invincible = true
+	$ShadeTimer.start()
+
+func _on_ShadeTimer_timeout():
+	speed = base_speed
+	$ShadeParticlesEffect.emitting = false
+	$PlayerSprite.modulate = Color.white
+	#remove da shader here
+	invincible = false
+	$ShadeCooldown.start()
