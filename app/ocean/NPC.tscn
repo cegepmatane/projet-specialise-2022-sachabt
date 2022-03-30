@@ -99,3 +99,8 @@ tree_root = SubResource( 9 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/playback = SubResource( 10 )
+
+[node name="InteractionTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="InteractionTimer" to="." method="_on_InteractionTimer_timeout"]

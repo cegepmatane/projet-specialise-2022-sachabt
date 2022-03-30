@@ -18,7 +18,6 @@ func _on_LoadButton_pressed():
 	var node_data = parse_json(save_game.get_line())
 	SceneSwitcher.change_scene(node_data["current_scene"])
 	
-	
 	Save.load_game()
 	pass
 
@@ -26,7 +25,6 @@ func _on_LoadButton_pressed():
 func _on_StartButton_pressed():
 	SceneSwitcher.change_scene(start_scene)
 	pass # Replace with function body.
-
 
 func _on_settingsButton_pressed():
 	add_child(settingsmenu.instance())

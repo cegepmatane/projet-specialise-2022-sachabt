@@ -26,11 +26,12 @@ func get_interaction():
 		$InteractionArea.get_overlapping_bodies()[0].interact()
 		update_hud()
 		#update HUD shouldn't be here !
-		
+	
 	if Input.is_action_just_pressed("attack"):
 		attack()
 	
 	if Input.is_action_just_pressed("shade") && $ShadeCooldown.time_left == 0:
+		print("argh")
 		shade()
 
 func update_hud():
@@ -46,12 +47,13 @@ func shade():
 	$PlayerSprite.modulate = Color(1,1,1,.2)
 	#maybe add a shader here
 	invincible = true
+	$ShadeParticlesEffect.one_shot = false
 	$ShadeTimer.start()
+	$ShadeCooldown.start()
 
 func _on_ShadeTimer_timeout():
 	speed = base_speed
-	$ShadeParticlesEffect.emitting = false
+	$ShadeParticlesEffect.one_shot = true
 	$PlayerSprite.modulate = Color.white
 	#remove da shader here
 	invincible = false
-	$ShadeCooldown.start()

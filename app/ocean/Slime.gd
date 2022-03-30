@@ -6,8 +6,8 @@ export var speed := 100
 export var lp := 1 
 var target = null
 
-var max_dist := 200
-var min_dist := 20
+export var max_dist := 200
+export var min_dist := 20
 
 var path := PoolVector2Array()
 var state_machine
@@ -23,7 +23,6 @@ func _physics_process(delta):
 	elif position.distance_to(target.position) > min_dist:
 		move(move_distance)
 	else:
-		print("attacking")
 		attack()
 
 func _on_DetectionArea_body_entered(body):
@@ -54,6 +53,17 @@ func set_path():
 		return
 
 func attack():
-	set_physics_process(false)
-	$AnimationPlayer.play("fade")
-	pass
+	state_machine.travel("attack")
+
+func hurt(damage):
+	lp -= damage
+	
+	#test this
+	if lp == 0:
+		state_machine.travel("death")
+		yield($AnimationPlayer, "animation_finished")
+		queue_free()
+
+func _on_AttackArea_body_entered(body):
+	if body.is_in_group("damageable") :
+		body.hurt()
