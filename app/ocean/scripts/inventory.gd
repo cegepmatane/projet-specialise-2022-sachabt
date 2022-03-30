@@ -3,6 +3,7 @@ extends Node
 var money :=0
 var potion := 0
 var current_health := 5
+export var max_health := 5
 
 func save():
 	var save_dict = {

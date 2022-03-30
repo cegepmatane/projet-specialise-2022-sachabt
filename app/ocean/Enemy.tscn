@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Slime.gd" type="Script" id=1]
 [ext_resource path="res://assets/slime.png" type="Texture" id=2]
@@ -63,7 +63,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id=14]
 resource_name = "death"
-length = 0.4
+length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Slime:frame")
 tracks/0/interp = 1
@@ -71,10 +71,24 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 29, 30, 31, 32 ]
+"values": [ 28, 29, 30, 31, 32 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "die"
+} ]
 }
 
 [sub_resource type="Animation" id=1]
@@ -117,14 +131,16 @@ auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+
 [sub_resource type="AnimationNodeStateMachine" id=2]
 states/attack/node = SubResource( 11 )
-states/attack/position = Vector2( 354, 42 )
+states/attack/position = Vector2( 434, 47 )
 states/death/node = SubResource( 15 )
-states/death/position = Vector2( 354, 151 )
+states/death/position = Vector2( 313, 162 )
 states/idle/node = SubResource( 7 )
-states/idle/position = Vector2( 159, 71 )
-transitions = [ "idle", "attack", SubResource( 12 ), "attack", "idle", SubResource( 13 ), "idle", "death", SubResource( 16 ) ]
+states/idle/position = Vector2( 161, 47 )
+transitions = [ "idle", "attack", SubResource( 12 ), "attack", "idle", SubResource( 13 ), "idle", "death", SubResource( 16 ), "attack", "death", SubResource( 17 ) ]
 start_node = "idle"
 end_node = "death"
 
@@ -137,8 +153,8 @@ radius = 67.0075
 radius = 14.0
 height = 10.0
 
-[node name="Slime" type="KinematicBody2D"]
-collision_layer = 0
+[node name="Slime" type="KinematicBody2D" groups=["damageable"]]
+collision_layer = 8
 collision_mask = 29
 script = ExtResource( 1 )
 

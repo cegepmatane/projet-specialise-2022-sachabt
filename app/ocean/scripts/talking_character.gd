@@ -10,5 +10,5 @@ func talk():
 	self.pause_mode = Node.PAUSE_MODE_PROCESS
 	get_tree().paused = true
 
-func dialog_end(arg):
+func dialog_end(_arg):
 	get_tree().paused = false

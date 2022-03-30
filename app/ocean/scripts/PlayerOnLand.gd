@@ -4,11 +4,12 @@ export var speed_increase := 1.2
 
 var state_machine
 var invincible := false
+export var attack_speed_penalty := .1
+export var weapon_damage := 1
 
 func _ready():
 	state_machine = $AnimationTree.get("parameters/playback")
 	update_hud()
-	
 
 func animate(direction):
 	if direction != Vector2.ZERO:
@@ -27,25 +28,26 @@ func get_interaction():
 		update_hud()
 		#update HUD shouldn't be here !
 	
-	if Input.is_action_just_pressed("attack"):
-		attack()
-	
-	if Input.is_action_just_pressed("shade") && $ShadeCooldown.time_left == 0:
-		print("argh")
-		shade()
+	if $AttackCooldown.time_left == 0 && $ShadeCooldown.time_left == 0:
+		if Input.is_action_just_pressed("attack"):
+			attack()
+		if Input.is_action_just_pressed("shade"):
+			shade()
 
 func update_hud():
 	$HUD.set_money(Inventory.money)
 	$HUD.set_potion(Inventory.potion)
 
 func attack():
-	pass
+	state_machine.travel("attack")
+	speed*= attack_speed_penalty
+	$AttackCooldown.start()
 
 func shade():
 	$ShadeParticlesEffect.emitting = true
 	speed *= speed_increase
 	$PlayerSprite.modulate = Color(1,1,1,.2)
-	#maybe add a shader here
+
 	invincible = true
 	$ShadeParticlesEffect.one_shot = false
 	$ShadeTimer.start()
@@ -57,3 +59,17 @@ func _on_ShadeTimer_timeout():
 	$PlayerSprite.modulate = Color.white
 	#remove da shader here
 	invincible = false
+
+func hurt(damage):
+	Inventory.current_health -= damage
+	
+	if Inventory.current_health <= 0:
+		#end game or something, or at least load last save, even go back to start menu
+		pass
+
+func _on_AttackArea2D_body_entered(body):
+	if body.is_in_group("damageable") :
+		body.hurt(weapon_damage)
+
+func _on_AttackCooldown_timeout():
+	speed = base_speed

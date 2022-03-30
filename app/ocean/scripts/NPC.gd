@@ -52,7 +52,7 @@ func move(distance : float):
 		last_point = path[0]
 		path.remove(0)
 
-func dialog_end(arg):
+func dialog_end(_arg):
 	get_tree().paused = false
 	$InteractionTimer.start()
 

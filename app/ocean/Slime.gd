@@ -5,7 +5,7 @@ extends KinematicBody2D
 export var speed := 100
 export var lp := 1 
 var target = null
-
+export var attack_damage := 1
 export var max_dist := 200
 export var min_dist := 20
 
@@ -32,8 +32,9 @@ func _on_DetectionArea_body_entered(body):
 	path = get_parent().get_enemy_path(self, target)
 
 func move(distance : float):
+	state_machine.travel("")
 	var last_point : = position
-	for index in range(path.size()):
+	for _index in range(path.size()):
 		var distance_to_next = last_point.distance_to(path[0])
 		if distance <= distance_to_next and distance >= 0.0:
 			position = last_point.linear_interpolate(path[0], distance / distance_to_next)
@@ -57,13 +58,16 @@ func attack():
 
 func hurt(damage):
 	lp -= damage
-	
 	#test this
-	if lp == 0:
+	if lp <= 0:
+		set_physics_process(false)
 		state_machine.travel("death")
-		yield($AnimationPlayer, "animation_finished")
-		queue_free()
+		print("should die but doesn't")
 
 func _on_AttackArea_body_entered(body):
 	if body.is_in_group("damageable") :
-		body.hurt()
+		body.hurt(attack_damage)
+
+func die():
+	print("yaaa")
+	queue_free()
