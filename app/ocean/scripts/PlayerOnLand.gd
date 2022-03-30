@@ -62,7 +62,8 @@ func _on_ShadeTimer_timeout():
 
 func hurt(damage):
 	Inventory.current_health -= damage
-	
+	visible = false
+	$BlinkTimer.start()
 	if Inventory.current_health <= 0:
 		#end game or something, or at least load last save, even go back to start menu
 		pass
@@ -73,3 +74,7 @@ func _on_AttackArea2D_body_entered(body):
 
 func _on_AttackCooldown_timeout():
 	speed = base_speed
+
+
+func _on_BlinkTimer_timeout():
+	visible = true

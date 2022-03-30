@@ -254,6 +254,11 @@ __meta__ = {
 wait_time = 0.6
 one_shot = true
 
+[node name="BlinkTimer" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
 [connection signal="timeout" from="ShadeTimer" to="." method="_on_ShadeTimer_timeout"]
 [connection signal="body_entered" from="AttackArea2D" to="." method="_on_AttackArea2D_body_entered"]
 [connection signal="timeout" from="AttackCooldown" to="." method="_on_AttackCooldown_timeout"]
+[connection signal="timeout" from="BlinkTimer" to="." method="_on_BlinkTimer_timeout"]

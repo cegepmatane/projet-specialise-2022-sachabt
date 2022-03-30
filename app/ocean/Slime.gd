@@ -12,11 +12,14 @@ export var min_dist := 20
 var path := PoolVector2Array()
 var state_machine
 
+var last_position
+
 func _ready():
 	state_machine = $AnimationTree.get("parameters/playback")
 	set_physics_process(false)
 
 func _physics_process(delta):
+	last_position = position
 	var move_distance : float = speed * delta
 	if position.distance_to(target.position) > max_dist:
 		set_physics_process(false)
@@ -24,6 +27,8 @@ func _physics_process(delta):
 		move(move_distance)
 	else:
 		attack()
+	
+	$Slime.flip_h = last_position.x - position.x > 0
 
 func _on_DetectionArea_body_entered(body):
 	print(target)
@@ -47,6 +52,9 @@ func move(distance : float):
 		distance -= distance_to_next
 		last_point = path[0]
 		path.remove(0)
+		
+		#rotate da slime plz
+		print()
 
 func set_path():
 	path = get_parent().get_enemy_path(self, target)
